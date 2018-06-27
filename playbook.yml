@@ -1,0 +1,14 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Update all Apt packages
+      apt:
+        upgrade: yes
+        update_cache: yes
+        force_apt_get: yes
+    - name: Install ZFS root requirements
+      apt:
+        pkg:
+          - gdisk
+          - zfs-initramfs
+        state: present

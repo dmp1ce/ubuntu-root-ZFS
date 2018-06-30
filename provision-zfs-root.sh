@@ -11,7 +11,9 @@ if [ "$(zpool list | grep -c 'no pools available')" -eq 0 ]; then
     exit
 fi
 
-# Format disk
+# Just in case sda cannot be booted from for some reason.
+# This might matter in a system with two physical disks
+# and probably doesn't matter for a VM.
 # BIOS
 sgdisk -a1 -n2:34:2047 -t2:EF02 /dev/disk/by-path/pci-0000:00:14.0-scsi-0:0:2:0
 # UEFI
@@ -43,6 +45,7 @@ mount --bind /run /mnt/run
 cat << EOF | chroot /mnt
 update-grub
 grub-install /dev/sda
+grub-install /dev/sdc
 EOF
 
 # Unmount
